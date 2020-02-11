@@ -13,6 +13,11 @@
         <option value="audi">Audi</option>
     </select>
   <script type="text/javascript">
+    
+    function setFieldValue(plugin, value) {
+        return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
+    }
+
     DatoCmsPlugin.init(function(plugin) {
       const select = document.querySelector("#optionSelect");
 
