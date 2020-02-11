@@ -76,12 +76,16 @@
     }
 
     DatoCmsPlugin.init(function(plugin) {
+      plugin.startAutoResizer();
+
       const type = getFieldType(plugin);
       const options = getOptions(plugin);
+      const list = getFieldValue(plugin);
       const inputElm = document.getElementById('itemInput');
       const selectElm = document.getElementById('optionSelect');
       const selectWrapperElm = document.getElementById('selectWrapper');
       const listElm = document.getElementById('list');
+      const addItemButtonElm = document.getElementById('addItemButton');
 
       if (!_.isEmpty(options)) {
         showSelect(options, selectElm);
@@ -91,7 +95,6 @@
         inputElm.type = 'number';
       }
 
-      plugin.startAutoResizer()
 
       selectElm.value = plugin.getFieldValue(plugin.fieldPath);
 
