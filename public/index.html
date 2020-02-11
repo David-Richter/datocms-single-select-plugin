@@ -20,6 +20,7 @@
                 <select id="optionSelect" name="option_select"></select>
                 <i class="select-icon fas fa-lg fa-chevron-down"></i>
             </div>
+            <button id="addItemButton" class="DatoCMS-button">Add</button>
         </div>
     </div>
 
@@ -29,10 +30,10 @@
     <script type="text/javascript">
 
     function deserializeValue(value) {
-      if (!value) {
-          return [];
-      }
-      return JSON.parse(value);
+        if (!value) {
+            return [];
+        }
+        return JSON.parse(value);
     }
 
     function getFieldValue(plugin) {
@@ -45,14 +46,14 @@
     }
 
     function getFieldType(plugin) {
-      var type = _.get(plugin, 'parameters.instance.type', 'string');
-      if (!_.includes(['string', 'number'], type)) {
-          console.error('illegal type "' + type + '" for datocms-plugin-typed-list');
-          return 'string';
-      }
-      return type;
+        var type = _.get(plugin, 'parameters.instance.type', 'string');
+        if (!_.includes(['string', 'number'], type)) {
+            console.error('illegal type "' + type + '" for datocms-plugin-typed-list');
+            return 'string';
+        }
+        return type;
     }
-      
+
     function getOptions(plugin) {
         var type = getFieldType(plugin);
         if (type === 'string') {
@@ -64,9 +65,9 @@
         }
     }
 
-    function showSelect(options, selectElm) {
-      inputElm.style.display = 'none';
-      selectWrapperElm.style.display = '';
+    function showSelect(options, inputElm, selectElm, selectWrapperElm) {
+        inputElm.style.display = 'none';
+        selectWrapperElm.style.display = '';
         _.forEach([''].concat(options), option => {
             var optionElm = document.createElement('option');
             optionElm.name = option;
@@ -75,38 +76,94 @@
         });
     }
 
+    function resetList(list, listElm, plugin) {
+        while (listElm.firstChild) {
+            listElm.removeChild(listElm.firstChild);
+        }
+        _.forEach(list, item => {
+            var liElm = createListItem(item, listElm, list, plugin);
+            listElm.appendChild(liElm);
+        });
+        if (_.isEmpty(list)) {
+            listElm.style.display = 'none';
+        } else {
+            listElm.style.display = '';
+        }
+    }
+
+    
+
+    function addItem(inputElm, list, listElm, plugin, type, options) {
+        var value = inputElm.value;
+        if (value !== '') {
+            if (type === 'string') {
+                if (_.isEmpty(options) || _.includes(options, value)) {
+                    inputElm.value = '';
+                    list.push(value);
+                    setFieldValue(plugin, list);
+                }
+            } else if (type === 'number') {
+                var number = _.toNumber(value);
+                if (_.isNumber(number)) {
+                    inputElm.value = '';
+                    list.push(number);
+                    setFieldValue(plugin, list);
+                }
+            }
+        }
+    }
+
+    
+
+    function parentElement(el, sel) {
+        do {
+            if (el.matches(sel)) {
+                return el;
+            }
+        } while (el = el.parentElement);
+        return null;
+    }
+
+    
     function init(plugin) {
 
-      plugin.startAutoResizer();
+        plugin.startAutoResizer();
 
-      const type = getFieldType(plugin);
-      const options = getOptions(plugin);
-      const list = getFieldValue(plugin);
-      const inputElm = document.getElementById('itemInput');
-      const selectElm = document.getElementById('optionSelect');
-      const selectWrapperElm = document.getElementById('selectWrapper');
-      const listElm = document.getElementById('list');
-      const addItemButtonElm = document.getElementById('addItemButton');
+        var type = getFieldType(plugin);
+        var options = getOptions(plugin);
+        var list = getFieldValue(plugin);
+        var inputElm = document.getElementById('itemInput');
+        var selectElm = document.getElementById('optionSelect');
+        var selectWrapperElm = document.getElementById('selectWrapper');
+        var listElm = document.getElementById('list');
+        var addItemButtonElm = document.getElementById('addItemButton');
 
-      if (!_.isEmpty(options)) {
-        showSelect(options, selectElm);
-      }
+        if (!_.isEmpty(options)) {
+            showSelect(options, inputElm, selectElm, selectWrapperElm);
+        }
 
-      if (type === 'number') {
-        inputElm.type = 'number';
-      }
+        resetList(list, listElm, plugin);
 
+        if (type === 'number') {
+            inputElm.type = 'number';
+        }
 
-      selectElm.value = plugin.getFieldValue(plugin.fieldPath);
+        plugin.addFieldChangeListener(plugin.fieldPath, function(newValue) {
+            list = deserializeValue(newValue);
+            resetList(list, listElm, plugin);
+        });
 
-      plugin.addFieldChangeListener(plugin.fieldPath, function(newValue) {
-        selectElm.value = newValue;
-      });
+        selectElm.addEventListener("change", function(e) {
+          plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
+          var formElement = _.isEmpty(options) ? inputElm : selectElm;
+          addItem(formElement, list, listElm, plugin, type, options);
+        });
 
-      selectElm.addEventListener("change", function(e) {
-        plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
-      });
-
+        inputElm.addEventListener("keyup", function(event) {
+            if ((event.keyCode === 13 || event.key === 'Enter')) {
+                addItem(inputElm, list, listElm, plugin, type, options);
+            }
+        });
     }
 
     if (!_.isUndefined(DatoCmsPlugin) && window.parent !== window) {
