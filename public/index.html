@@ -14,17 +14,17 @@
     </select>
   <script type="text/javascript">
     DatoCmsPlugin.init(function(plugin) {
-      const input = document.querySelector("select");
+      const select = document.querySelector("#optionSelect");
 
       plugin.startAutoResizer()
 
-      input.value = plugin.getFieldValue(plugin.fieldPath);
+      select.value = plugin.getFieldValue(plugin.fieldPath);
 
       plugin.addFieldChangeListener(plugin.fieldPath, function(newValue) {
-        input.value = newValue;
+        select.value = newValue;
       });
 
-      input.addEventListener("change", function(e) {
+      select.addEventListener("change", function(e) {
         plugin.setFieldValue(plugin.fieldPath, e.target.value);
       });
     });
