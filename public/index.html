@@ -13,20 +13,31 @@
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
   <script type="text/javascript">
 
-function setFieldValue(plugin, value) {
-    return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
-}
-
-  function getFieldType(plugin) {
-    var type = _.get(plugin, 'parameters.instance.type', 'string');
-    if (!_.includes(['string', 'number'], type)) {
-        console.error('illegal type "' + type + '" for datocms-plugin-typed-list');
-        return 'string';
+    function deserializeValue(value) {
+      if (!value) {
+          return [];
+      }
+      return JSON.parse(value);
     }
-    return type;
-}
-    
 
+    function getFieldValue(plugin) {
+        var fieldValue = plugin.getFieldValue(plugin.fieldPath);
+        return deserializeValue(fieldValue);
+    }
+
+    function setFieldValue(plugin, value) {
+        return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
+    }
+
+    function getFieldType(plugin) {
+      var type = _.get(plugin, 'parameters.instance.type', 'string');
+      if (!_.includes(['string', 'number'], type)) {
+          console.error('illegal type "' + type + '" for datocms-plugin-typed-list');
+          return 'string';
+      }
+      return type;
+    }
+      
     function getOptions(plugin) {
         var type = getFieldType(plugin);
         if (type === 'string') {
@@ -48,13 +59,18 @@ function setFieldValue(plugin, value) {
     }
 
     DatoCmsPlugin.init(function(plugin) {
-      const select = document.querySelector("#optionSelect");
-    var type = getFieldType(plugin);
+      const type = getFieldType(plugin);
       const options = getOptions(plugin);
+      const list = getFieldValue(plugin);
+      const select = document.querySelector("#optionSelect");
 
       if (!_.isEmpty(options)) {
         showSelect(options, select);
-    }
+      }
+
+      if (type === 'number') {
+        inputElm.type = 'number';
+      }
 
       plugin.startAutoResizer()
 
@@ -67,6 +83,9 @@ function setFieldValue(plugin, value) {
       select.addEventListener("change", function(e) {
         plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
       });
+
+      getFieldValue: () => list
+
     });
   </script>
 </body>
