@@ -1,6 +1,6 @@
 {
   "name": "@dynvis/datocms-plugin-typed-list",
-  "version": "0.1.11",
+  "version": "0.1.7",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +18,24 @@
     "pluginType": "field_editor",
     "parameters": {
       "global": [],
-      "instance": []
+      "instance": [
+        {
+          "id": "type",
+          "label": "Type",
+          "hint": "The type of list items, possible values: 'string' or 'number'",
+          "type": "string",
+          "required": false,
+          "default": "string"
+        },
+        {
+          "id": "options",
+          "label": "Options",
+          "hint": "List of comma separated allowed values. Used when type is set to 'string'",
+          "type": "string",
+          "required": false,
+          "default": ""
+        }
+      ]
     }
   },
   "repository": {

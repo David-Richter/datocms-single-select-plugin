@@ -6,20 +6,43 @@
   <link href="https://unpkg.com/datocms-plugins-sdk/dist/sdk.css" media="all" rel="stylesheet" />
 </head>
 <body>
-    <select id="optionSelect" name="option_select">
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-    </select>
+    <form>
+        <select id="optionSelect" name="option_select">
+        </select>
+    </form>
   <script type="text/javascript">
     
     function setFieldValue(plugin, value) {
         return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
     }
 
+    function getOptions(plugin) {
+        var type = getFieldType(plugin);
+        if (type === 'string') {
+            var options = _.get(plugin, 'parameters.instance.options', '');
+            var optionsArr = _.chain(options).split(',').map(option => _.trim(option)).compact().value();
+            return _.isEmpty(optionsArr) ? null : optionsArr;
+        } else {
+            return null;
+        }
+    }
+
+    function showSelect(options, selectElm) {
+        _.forEach([''].concat(options), option => {
+            var optionElm = document.createElement('option');
+            optionElm.name = option;
+            optionElm.appendChild(document.createTextNode(option));
+            selectElm.appendChild(optionElm);
+        });
+    }
+
     DatoCmsPlugin.init(function(plugin) {
       const select = document.querySelector("#optionSelect");
+      const options = getOptions(plugin);
+
+      if (!_.isEmpty(options)) {
+        showSelect(options, select);
+    }
 
       plugin.startAutoResizer()
 
