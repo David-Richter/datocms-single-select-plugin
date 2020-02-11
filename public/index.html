@@ -221,7 +221,37 @@
         }
     }
 
-    
+    function createListItem(value, listElm, list, plugin) {
+        var liElm = document.createElement('li');
+        var buttonElm = document.createElement('span');
+        var removeIcon = document.createElement('i');
+        var dragContainer = document.createElement('span');
+        var dragIcon = document.createElement('i');
+        var span = document.createElement('span');
+        var textNode = document.createTextNode(value);
+        var editControls = createListEditControls(liElm, span, value, plugin);
+
+        span.className = 'item-value';
+        buttonElm.className = 'remove-button';
+        removeIcon.className = 'fas fa-times';
+        dragContainer.className = 'drag-handle';
+        dragIcon.className = 'fas fa-grip-lines';
+        dragContainer.appendChild(dragIcon);
+        buttonElm.appendChild(removeIcon);
+        span.appendChild(textNode);
+
+        liElm.setAttribute('draggable', 'true');
+        liElm.appendChild(dragContainer);
+        liElm.appendChild(span);
+        liElm.append(editControls);
+        liElm.appendChild(buttonElm);
+
+        buttonElm.addEventListener('click', function() {
+            removeItem(liElm, listElm, list, plugin);
+        });
+
+        return liElm;
+    }
 
     function addItem(inputElm, list, listElm, plugin, type, options) {
         var value = inputElm.value;
