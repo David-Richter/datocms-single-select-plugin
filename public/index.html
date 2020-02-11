@@ -11,10 +11,20 @@
         </select>
     </form>
   <script type="text/javascript">
-    
-    function setFieldValue(plugin, value) {
-        return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
+
+function setFieldValue(plugin, value) {
+    return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
+}
+
+  function getFieldType(plugin) {
+    var type = _.get(plugin, 'parameters.instance.type', 'string');
+    if (!_.includes(['string', 'number'], type)) {
+        console.error('illegal type "' + type + '" for datocms-plugin-typed-list');
+        return 'string';
     }
+    return type;
+}
+    
 
     function getOptions(plugin) {
         var type = getFieldType(plugin);
@@ -38,6 +48,7 @@
 
     DatoCmsPlugin.init(function(plugin) {
       const select = document.querySelector("#optionSelect");
+    var type = getFieldType(plugin);
       const options = getOptions(plugin);
 
       if (!_.isEmpty(options)) {
