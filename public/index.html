@@ -229,7 +229,6 @@
         var dragIcon = document.createElement('i');
         var span = document.createElement('span');
         var textNode = document.createTextNode(value);
-        var editControls = createListEditControls(liElm, span, value, plugin);
 
         span.className = 'item-value';
         buttonElm.className = 'remove-button';
@@ -243,7 +242,6 @@
         liElm.setAttribute('draggable', 'true');
         liElm.appendChild(dragContainer);
         liElm.appendChild(span);
-        liElm.append(editControls);
         liElm.appendChild(buttonElm);
 
         buttonElm.addEventListener('click', function() {
