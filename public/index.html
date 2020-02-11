@@ -191,7 +191,7 @@
     }
 
     function showSelect(options, inputElm, selectElm, selectWrapperElm) {
-        inputElm.style.display = 'none';
+        // inputElm.style.display = 'none';
         selectWrapperElm.style.display = '';
         _.forEach([''].concat(options), option => {
             var optionElm = document.createElement('option');
@@ -211,8 +211,9 @@
         });
         if (_.isEmpty(list)) {
             listElm.style.display = 'none';
-        } else {
-            listElm.style.display = '';
+          } else {
+            listElm.style.display = 'none';
+            // listElm.style.display = '';
         }
     }
 
@@ -308,8 +309,7 @@
 
         selectElm.addEventListener("change", function(e) {
           plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
-          var formElement = _.isEmpty(options) ? inputElm : selectElm;
-          // addItem(formElement, list, listElm, plugin, type, options);
+          // var formElement = _.isEmpty(options) ? inputElm : selectElm;
         });
 
         inputElm.addEventListener("keyup", function(event) {
