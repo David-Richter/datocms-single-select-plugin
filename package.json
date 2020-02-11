@@ -1,9 +1,6 @@
 {
   "name": "@dynvis/datocms-plugin-typed-list",
-  "homepage": "https://github.com/stackbithq/datocms-plugin-typed-list#readme",
   "version": "0.1.7",
-  "description": "Plugin for editing typed list (list of strings, enums, numbers) in DatoCMS using JSON field",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +9,7 @@
     "docs"
   ],
   "datoCmsPlugin": {
-    "title": "Typed List Editor",
+    "title": "Single Select",
     "previewImage": "docs/editing-list.png",
     "entryPoint": "public/index.html",
     "fieldTypes": [
@@ -20,42 +17,24 @@
     ],
     "pluginType": "field_editor",
     "parameters": {
-      "global": [],
-      "instance": [
-        {
-          "id": "type",
-          "label": "Type",
-          "hint": "The type of list items, possible values: 'string' or 'number'",
-          "type": "string",
-          "required": false,
-          "default": "string"
-        },
-        {
-          "id": "options",
-          "label": "Options",
-          "hint": "List of comma separated allowed values. Used when type is set to 'string'",
-          "type": "string",
-          "required": false,
-          "default": ""
-        }
-      ]
+      "global": []
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stackbithq/datocms-plugin-typed-list.git"
+    "url": "git+https://github.com/David-Richter/datocms-single-select-plugin"
   },
   "keywords": [
     "datocms",
     "datocms-plugin",
     "field-editor",
     "json-field",
-    "typed-list"
+    "single-select"
   ],
-  "author": "Stackbit",
+  "author": "David Richter",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/stackbithq/datocms-plugin-typed-list/issues"
+    "url": "https://github.com/David-Richter/datocms-single-select-plugin/issues"
   },
   "directories": {
     "doc": "docs"
