@@ -30,7 +30,7 @@
       });
 
       select.addEventListener("change", function(e) {
-        plugin.setFieldValue(plugin.fieldPath, [JSON.stringify(e.target.value)]);
+        plugin.setFieldValue(plugin.fieldPath, "[JSON.stringify(e.target.value)]");
       });
     });
   </script>
