@@ -75,7 +75,8 @@
         });
     }
 
-    DatoCmsPlugin.init(function(plugin) {
+    function init(plugin) {
+
       plugin.startAutoResizer();
 
       const type = getFieldType(plugin);
@@ -106,9 +107,31 @@
         plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
       });
 
-      getFieldValue: () => list
+    }
 
-    });
+    if (!_.isUndefined(DatoCmsPlugin) && window.parent !== window) {
+        DatoCmsPlugin.init(init);
+    } else {
+        var list = JSON.stringify(["foo", "bar"]);
+        init({
+            callbacks: {},
+            startAutoResizer: () => {},
+            addFieldChangeListener: function(fieldPath, callback) {
+                this.callbacks[fieldPath] = callback;
+            },
+            getFieldValue: () => list,
+            setFieldValue: function(fieldPath, value) {
+                list = value;
+                _.invoke(this.callbacks, fieldPath, [value]);
+            },
+            fieldPath: 'some_field',
+            parameters: {
+                instance: {
+                    type: 'string'
+                }
+            }
+        });
+    }
   </script>
 </body>
 </html>
