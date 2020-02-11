@@ -6,21 +6,31 @@
   <link href="https://unpkg.com/datocms-plugins-sdk/dist/sdk.css" media="all" rel="stylesheet" />
 </head>
 <body>
-  <input type="text" />
+    <select id="optionSelect" name="option_select">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+    </select>
   <script type="text/javascript">
+    
+    function setFieldValue(plugin, value) {
+        return plugin.setFieldValue(plugin.fieldPath, JSON.stringify(value));
+    }
+
     DatoCmsPlugin.init(function(plugin) {
-      const input = document.querySelector("input");
+      const select = document.querySelector("#optionSelect");
 
       plugin.startAutoResizer()
 
-      input.value = plugin.getFieldValue(plugin.fieldPath);
+      select.value = plugin.getFieldValue(plugin.fieldPath);
 
       plugin.addFieldChangeListener(plugin.fieldPath, function(newValue) {
-        input.value = newValue;
+        select.value = newValue;
       });
 
-      input.addEventListener("change", function(e) {
-        plugin.setFieldValue(plugin.fieldPath, e.target.value);
+      select.addEventListener("change", function(e) {
+        plugin.setFieldValue(plugin.fieldPath, [JSON.stringify(e.target.value)]);
       });
     });
   </script>
