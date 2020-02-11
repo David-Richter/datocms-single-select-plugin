@@ -1,6 +1,6 @@
 {
   "name": "@dynvis/datocms-plugin-typed-list",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,9 +18,7 @@
     "pluginType": "field_editor",
     "parameters": {
       "global": [],
-      "instance": [
-        
-      ]
+      "instance": []
     }
   },
   "repository": {
