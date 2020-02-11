@@ -84,7 +84,7 @@
       const listElm = document.getElementById('list');
 
       if (!_.isEmpty(options)) {
-        showSelect(options, select);
+        showSelect(options, selectElm);
       }
 
       if (type === 'number') {
@@ -93,13 +93,13 @@
 
       plugin.startAutoResizer()
 
-      select.value = plugin.getFieldValue(plugin.fieldPath);
+      selectElm.value = plugin.getFieldValue(plugin.fieldPath);
 
       plugin.addFieldChangeListener(plugin.fieldPath, function(newValue) {
-        select.value = newValue;
+        selectElm.value = newValue;
       });
 
-      select.addEventListener("change", function(e) {
+      selectElm.addEventListener("change", function(e) {
         plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
       });
 
