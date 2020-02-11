@@ -314,12 +314,13 @@
         selectElm.addEventListener("change", function(e) {
           plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
           var formElement = _.isEmpty(options) ? inputElm : selectElm;
-          addItem(formElement, list, listElm, plugin, type, options);
+          // addItem(formElement, list, listElm, plugin, type, options);
         });
 
         inputElm.addEventListener("keyup", function(event) {
             if ((event.keyCode === 13 || event.key === 'Enter')) {
                 addItem(inputElm, list, listElm, plugin, type, options);
+                plugin.setFieldValue(plugin.fieldPath, "[" + JSON.stringify(e.target.value) + "]");
             }
         });
     }
